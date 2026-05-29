@@ -1,6 +1,14 @@
 # Proyecto de Analítica Predictiva: Estimación de Costos en Servicios de Salud
 **Curso de Ciencia de Datos - Facultad de Ingeniería Industrial**
 
+## Integrantes
+* JUAN DAVID DIAZ CEPEDA
+* NATALIA ALEJANDRA MENDIETA ORTEGA
+* GUSTAVO ADOLFO RAMIREZ TAFUR
+* NATALIA SOLER JIMENEZ
+
+---
+
 Este proyecto desarrolla un sistema de evaluación y predicción para estimar los gastos médicos anuales de una cartera de 1,338 asegurados. A través de un enfoque híbrido, el sistema combina un pipeline de preparación y entrenamiento de modelos de regresión con interfaces interactivas para el análisis exploratorio y la consulta de predicciones en tiempo real.
 
 ---
@@ -22,21 +30,21 @@ El núcleo técnico se concentra en `entrenamiento.py`. Aquí se unificó el tra
 
 Se configuraron y compararon tres arquitecturas distintas con el fin de evaluar su capacidad de generalización:
 
-1. Regresión Lineal (`LinearRegression`): Utilizado como modelo base para identificar tendencias aditivas simples.
-2. Árbol de Regresión (`DecisionTreeRegressor`): Restringido a una profundidad máxima de 5 niveles para permitir segmentaciones no lineales básicas sin caer en sobreajuste.
-3. Random Forest (`RandomForestRegressor`): Ensamble de 100 estimadores independientes, implementado con el fin de estabilizar la varianza global y capturar interacciones complejas.
+1. **Regresión Lineal (`LinearRegression`):** Utilizado como modelo base para identificar tendencias aditivas simples.
+2. **Árbol de Regresión (`DecisionTreeRegressor`):** Restringido a una profundidad máxima de 5 niveles para permitir segmentaciones no lineales básicas sin caer en sobreajuste.
+3. **Random Forest (`RandomForestRegressor`):** Ensamble de 100 estimadores independientes, implementado con el fin de estabilizar la varianza global y capturar interacciones complejas.
 
 ---
 
 ## Análisis de Resultados y Criterio de Selección
 
 ### Rendimiento Relativo
-Los resultados en el conjunto de test muestran de manera consistente que el algoritmo de Random Forest obtiene el coeficiente de determinación (R²) más alto y el menor error cuadrático medio (RMSE). 
+Los resultados en el conjunto de test muestran de manera consistente que el algoritmo de Random Forest obtiene el coeficiente de determinación ($R^2$) más alto y el menor error cuadrático medio (RMSE). 
 
 La superioridad de los modelos basados en árboles frente a la regresión lineal radica en la naturaleza de los datos. La regresión lineal asume un impacto constante por variable; sin embargo, en este escenario existe un comportamiento marcadamente no lineal y multiplicativo. El caso más evidente ocurre con la interacción entre el tabaquismo y el índice de masa corporal (IMC): un paciente fumador con un IMC estándar no experimenta el mismo incremento exponencial en sus costos que un paciente fumador que además presenta un diagnóstico de obesidad (IMC mayor a 30). Los árboles de decisión logran identificar y aislar estas interacciones mediante sus divisiones nodales.
 
 ### Control de Sobreajuste
-Es importante notar que los modelos de ensamble tienden a memorizar con facilidad el conjunto de entrenamiento (alcanzando valores de R² cercanos al 98%). Para mitigar este riesgo en el bosque aleatorio, se aplicaron restricciones de profundidad y tamaño de muestras. La diferencia controlada entre las métricas de train y test confirma que el modelo es estable frente a información nueva.
+Es importante notar que los modelos de ensamble tienden a memorizar con facilidad el conjunto de entrenamiento (alcanzando valores de $R^2$ cercanos al 98%). Para mitigar este riesgo en el bosque aleatorio, se aplicaron restricciones de profundidad y tamaño de muestras. La diferencia controlada entre las métricas de entrenamiento y prueba confirma que el modelo es estable frente a información nueva.
 
 ### Propuesta de Despliegue
 Para el entorno de producción se seleccionó el modelo de Random Forest. En la gestión del riesgo financiero dentro de la ingeniería de servicios de salud, subestimar el costo de un siniestro debido a las limitaciones de un modelo lineal plano representa un peligro económico crítico, justificando por completo el uso de un modelo de ensamble.
@@ -49,5 +57,13 @@ Para poner en marcha los componentes del proyecto, ejecute los siguientes comand
 
 ### 1. Instalación de librerías
 Asegure las dependencias necesarias en su entorno local:
-```bash
 pip install -r requirements.txt
+2. Fase de entrenamiento
+Bash
+python entrenamiento.py
+3. Visualización del Dashboard (Módulo EDA)
+Bash
+streamlit run app_visualizacion.py
+4. Plataforma de Simulación Predictiva (Módulo ML)
+Bash
+streamlit run app_ml.py
