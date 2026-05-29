@@ -1,6 +1,6 @@
 # Proyecto de Analítica Predictiva: Estimación de Costos en Servicios de Salud
 
-### Curso de Ciencia de Datos - Facultad de Ingeniería Industrial
+### Curso de Ciencia de Datos - Facultad de Ingeniería 
 
 ## Integrantes
 
