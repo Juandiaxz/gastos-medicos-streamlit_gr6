@@ -1,7 +1,9 @@
 # Proyecto de Analítica Predictiva: Estimación de Costos en Servicios de Salud
-**Curso de Ciencia de Datos - Facultad de Ingeniería Industrial**
+
+### Curso de Ciencia de Datos - Facultad de Ingeniería Industrial
 
 ## Integrantes
+
 * JUAN DAVID DIAZ CEPEDA
 * NATALIA ALEJANDRA MENDIETA ORTEGA
 * GUSTAVO ADOLFO RAMIREZ TAFUR
@@ -9,61 +11,234 @@
 
 ---
 
-Este proyecto desarrolla un sistema de evaluación y predicción para estimar los gastos médicos anuales de una cartera de 1,338 asegurados. A través de un enfoque híbrido, el sistema combina un pipeline de preparación y entrenamiento de modelos de regresión con interfaces interactivas para el análisis exploratorio y la consulta de predicciones en tiempo real.
+## Descripción General
+
+Este proyecto desarrolla una plataforma de analítica predictiva orientada a la estimación de gastos médicos anuales de una cartera de 1,338 asegurados. El sistema integra procesos de análisis exploratorio de datos (EDA), entrenamiento de modelos de machine learning y simulación predictiva mediante interfaces interactivas desarrolladas en Streamlit.
+
+El enfoque implementado permite:
+
+* Analizar patrones estadísticos y distribuciones de variables médicas y demográficas.
+* Evaluar el comportamiento financiero de los costos asociados a pacientes.
+* Comparar múltiples algoritmos de regresión supervisada.
+* Generar predicciones en tiempo real para nuevos perfiles clínicos.
+* Interpretar la importancia relativa de cada variable dentro del modelo seleccionado.
 
 ---
 
-## Estructura del Repositorio
+# Vista General del Sistema
 
-* `data/gastos_medicos.csv`: Datos históricos con variables demográficas, antropométricas y hábitos de los asegurados.
-* `models/`: Directorio destinado al almacenamiento de los modelos entrenados en formato serializado y sus respectivos registros de rendimiento.
-* `entrenamiento.py`: Script de backend encargado del preprocesamiento de variables y el ajuste de los algoritmos.
-* `app_visualizacion.py`: Interfaz orientada al análisis exploratorio de datos, distribución de frecuencias y comportamiento de variables macro.
-* `app_ml.py`: Módulo de inferencia que permite ingresar nuevos perfiles de pacientes, comparar modelos en paralelo y evaluar la importancia de los atributos.
-* `requirements.txt`: Declaración de librerías y dependencias del entorno de ejecución.
+## Dashboard de Visualización y Análisis Exploratorio
 
----
+La primera aplicación corresponde al módulo de análisis exploratorio de datos (`app_visualizacion.py`), diseñado para examinar distribuciones, correlaciones y patrones generales de comportamiento en la base de asegurados.
 
-## Resumen del Entorno de Desarrollo y Modelado
+<img width="1839" height="858" alt="image" src="https://github.com/user-attachments/assets/d64afacb-1b1d-4ed1-9d33-a86148205b37" />
 
-El núcleo técnico se concentra en `entrenamiento.py`. Aquí se unificó el tratamiento de los datos mediante transformadores de columnas: las variables cuantitativas se estandarizaron para corregir diferencias de escala, mientras que las cualitativas se transformaron mediante codificación binaria (One-Hot Encoding) omitiendo la primera categoría para prevenir problemas de multicolinealidad.
 
-Se configuraron y compararon tres arquitecturas distintas con el fin de evaluar su capacidad de generalización:
+Características principales:
 
-1. **Regresión Lineal (`LinearRegression`):** Utilizado como modelo base para identificar tendencias aditivas simples.
-2. **Árbol de Regresión (`DecisionTreeRegressor`):** Restringido a una profundidad máxima de 5 niveles para permitir segmentaciones no lineales básicas sin caer en sobreajuste.
-3. **Random Forest (`RandomForestRegressor`):** Ensamble de 100 estimadores independientes, implementado con el fin de estabilizar la varianza global y capturar interacciones complejas.
+* Distribución de gastos médicos.
+* Comparación entre fumadores y no fumadores.
+* Relación entre IMC y costos médicos.
+* Segmentación por región y género.
+* Métricas descriptivas generales.
+* Histogramas, gráficos de dispersión y análisis categórico.
 
 ---
 
-## Análisis de Resultados y Criterio de Selección
+## Plataforma Predictiva y Simulación de Costos
 
-### Rendimiento Relativo
-Los resultados en el conjunto de test muestran de manera consistente que el algoritmo de Random Forest obtiene el coeficiente de determinación ($R^2$) más alto y el menor error cuadrático medio (RMSE). 
+La segunda aplicación corresponde al módulo de inferencia y simulación predictiva (`app_ml.py`). Este componente permite ingresar información de nuevos pacientes y obtener estimaciones automáticas de gastos médicos utilizando distintos modelos entrenados.
 
-La superioridad de los modelos basados en árboles frente a la regresión lineal radica en la naturaleza de los datos. La regresión lineal asume un impacto constante por variable; sin embargo, en este escenario existe un comportamiento marcadamente no lineal y multiplicativo. El caso más evidente ocurre con la interacción entre el tabaquismo y el índice de masa corporal (IMC): un paciente fumador con un IMC estándar no experimenta el mismo incremento exponencial en sus costos que un paciente fumador que además presenta un diagnóstico de obesidad (IMC mayor a 30). Los árboles de decisión logran identificar y aislar estas interacciones mediante sus divisiones nodales.
+<img width="1741" height="885" alt="image" src="https://github.com/user-attachments/assets/1d5f0921-7196-404c-867c-a3157a415595" />
 
-### Control de Sobreajuste
-Es importante notar que los modelos de ensamble tienden a memorizar con facilidad el conjunto de entrenamiento (alcanzando valores de $R^2$ cercanos al 98%). Para mitigar este riesgo en el bosque aleatorio, se aplicaron restricciones de profundidad y tamaño de muestras. La diferencia controlada entre las métricas de entrenamiento y prueba confirma que el modelo es estable frente a información nueva.
 
-### Propuesta de Despliegue
-Para el entorno de producción se seleccionó el modelo de Random Forest. En la gestión del riesgo financiero dentro de la ingeniería de servicios de salud, subestimar el costo de un siniestro debido a las limitaciones de un modelo lineal plano representa un peligro económico crítico, justificando por completo el uso de un modelo de ensamble.
+Funciones principales:
+
+* Predicción de costos médicos en tiempo real.
+* Comparación paralela entre modelos.
+* Visualización de métricas de rendimiento.
+* Interpretabilidad mediante importancia de variables.
+* Evaluación del impacto de hábitos y condiciones físicas sobre el costo estimado.
 
 ---
 
-## Guía de Ejecución
+# Estructura del Repositorio
 
-Para poner en marcha los componentes del proyecto, ejecute los siguientes comandos en la terminal desde el directorio raíz:
+```text
+Proyecto/
+│
+├── data/
+│   └── gastos_medicos.csv
+│
+├── models/
+│   ├── random_forest.pkl
+│   ├── decision_tree.pkl
+│   ├── linear_regression.pkl
+│   └── metricas_modelos.csv
+│
+├── images/
+│   ├── dashboard_eda.png
+│   └── dashboard_ml.png
+│
+├── entrenamiento.py
+├── app_visualizacion.py
+├── app_ml.py
+├── requirements.txt
+└── README.md
+```
 
-### 1. Instalación de librerías
-Asegure las dependencias necesarias en su entorno local:
+Descripción de componentes:
+
+| Archivo / Directorio      | Descripción                                                                  |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| `data/gastos_medicos.csv` | Dataset histórico utilizado para entrenamiento y validación.                 |
+| `models/`                 | Almacena modelos serializados y métricas generadas durante el entrenamiento. |
+| `images/`                 | Carpeta destinada a capturas y recursos visuales del proyecto.               |
+| `entrenamiento.py`        | Pipeline principal de preprocesamiento, entrenamiento y evaluación.          |
+| `app_visualizacion.py`    | Dashboard interactivo de análisis exploratorio de datos.                     |
+| `app_ml.py`               | Plataforma de simulación predictiva basada en machine learning.              |
+| `requirements.txt`        | Dependencias necesarias para la ejecución del entorno.                       |
+
+---
+
+# Arquitectura de Modelado
+
+El núcleo analítico del proyecto se implementó en `entrenamiento.py`, donde se construyó un pipeline unificado de preparación de datos y entrenamiento supervisado.
+
+## Preprocesamiento de Datos
+
+Se aplicaron estrategias diferenciadas según el tipo de variable:
+
+### Variables Numéricas
+
+Las variables cuantitativas fueron normalizadas mediante estandarización (`StandardScaler`) para reducir diferencias de escala y mejorar la estabilidad matemática de los modelos.
+
+### Variables Categóricas
+
+Las variables cualitativas fueron transformadas usando codificación One-Hot Encoding, eliminando la primera categoría para evitar multicolinealidad.
+
+---
+
+# Modelos Evaluados
+
+## 1. Regresión Lineal (`LinearRegression`)
+
+Modelo base utilizado para establecer una referencia estadística inicial y analizar relaciones lineales simples entre variables.
+
+## 2. Árbol de Regresión (`DecisionTreeRegressor`)
+
+Modelo no lineal configurado con profundidad máxima de 5 niveles para reducir sobreajuste y mejorar interpretabilidad.
+
+## 3. Random Forest (`RandomForestRegressor`)
+
+Modelo de ensamble basado en múltiples árboles de decisión independientes, implementado con 100 estimadores para estabilizar la varianza y capturar interacciones complejas entre variables.
+
+---
+
+# Resultados y Evaluación
+
+## Comparación de Rendimiento
+
+Los resultados muestran que el modelo `RandomForestRegressor` obtiene consistentemente:
+
+* Mayor coeficiente de determinación ($R^2$).
+* Menor error cuadrático medio (RMSE).
+* Mejor capacidad de generalización sobre datos no observados.
+
+La superioridad de los modelos basados en árboles se explica por la naturaleza no lineal de los datos médicos y financieros analizados.
+
+---
+
+## Interacciones Relevantes Detectadas
+
+Uno de los patrones más importantes encontrados corresponde a la interacción entre:
+
+* Índice de Masa Corporal (IMC)
+* Hábito de tabaquismo
+
+Un paciente fumador con obesidad presenta incrementos exponenciales en sus gastos médicos, comportamiento que no puede modelarse adecuadamente mediante regresión lineal clásica.
+
+Los árboles de decisión y Random Forest logran identificar estas interacciones complejas mediante segmentaciones jerárquicas del espacio de datos.
+
+---
+
+# Control de Sobreajuste
+
+Dado que los modelos de ensamble tienden a memorizar fácilmente el conjunto de entrenamiento, se implementaron mecanismos de regularización:
+
+* Restricción de profundidad máxima.
+* Control del tamaño mínimo de muestras.
+* Separación entrenamiento/prueba.
+* Validación mediante métricas comparativas.
+
+La diferencia controlada entre métricas de entrenamiento y prueba evidencia estabilidad y capacidad de generalización.
+
+---
+
+# Modelo Seleccionado para Producción
+
+El modelo seleccionado para despliegue fue `RandomForestRegressor`, debido a:
+
+* Mayor precisión predictiva.
+* Mejor manejo de relaciones no lineales.
+* Mayor robustez frente a ruido y variabilidad.
+* Mejor desempeño en escenarios financieros complejos.
+
+Desde la perspectiva de ingeniería financiera aplicada a salud, subestimar costos médicos representa un riesgo económico significativo. Por ello, el uso de modelos de ensamble se considera técnicamente justificado.
+
+---
+
+# Tecnologías Utilizadas
+
+* Python 3.x
+* Pandas
+* NumPy
+* Scikit-Learn
+* Streamlit
+* Matplotlib
+* Seaborn
+* Joblib
+
+---
+
+# Guía de Ejecución
+
+## 1. Instalación de Dependencias
+
+```bash
 pip install -r requirements.txt
-2. Fase de entrenamiento
-Bash
+```
+
+---
+
+## 2. Entrenamiento de Modelos
+
+```bash
 python entrenamiento.py
-3. Visualización del Dashboard (Módulo EDA)
-Bash
+```
+
+Este proceso:
+
+* Limpia y transforma los datos.
+* Entrena los modelos.
+* Calcula métricas.
+* Guarda modelos serializados en `/models`.
+
+---
+
+## 3. Ejecución del Dashboard EDA
+
+```bash
 streamlit run app_visualizacion.py
-4. Plataforma de Simulación Predictiva (Módulo ML)
-Bash
+```
+
+Módulo orientado al análisis exploratorio y visualización estadística.
+
+---
+
+## 4. Ejecución del Módulo Predictivo
+
+```bash
 streamlit run app_ml.py
+```
+
